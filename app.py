@@ -65,26 +65,25 @@ if not df.empty:
     df["Date Group"] = pd.to_datetime(df["Date Applied"]).dt.date
     grouped = df.groupby("Date Group")
 
-# Helper function to get the date in "28th March 2025" format
-def format_fancy_date(d):
-    day = d.day
-    suffix = "th" if 11 <= day <= 13 else {1: "st", 2: "nd", 3: "rd"}.get(day % 10, "th")
-    return f"{day}{suffix} {d.strftime('%B %Y')}"
+    # Helper function to get the date in "28th March 2025" format
+    def format_fancy_date(d):
+        day = d.day
+        suffix = "th" if 11 <= day <= 13 else {1: "st", 2: "nd", 3: "rd"}.get(day % 10, "th")
+        return f"{day}{suffix} {d.strftime('%B %Y')}"
 
-# Group and display applications by date
-for date, group in grouped:
-    formatted_date = format_fancy_date(date)
-    with st.expander(f"📅 {formatted_date} ({len(group)} application(s))", expanded=False):
-        for _, row in group.iterrows():
-            st.markdown(f"**🏢 Company:** {row['Company']}")
-            st.markdown(f"**🕒 Applied At:** {row['Date Applied']}")
-            st.markdown(f"**📎 Resume File:** `{row['Resume File']}`")
-            st.markdown("**📄 Job Description:**")
-            st.markdown(f"`{row['Job Description']}`")
-            st.markdown("---")
+    # Group and display applications by date
+    for date, group in grouped:
+        formatted_date = format_fancy_date(date)
+        with st.expander(f"📅 {formatted_date} ({len(group)} application(s))", expanded=False):
+            for _, row in group.iterrows():
+                st.markdown(f"**🏢 Company:** {row['Company']}")
+                st.markdown(f"**🕒 Applied At:** {row['Date Applied']}")
+                st.markdown(f"**📎 Resume File:** `{row['Resume File']}`")
+                st.markdown("**📄 Job Description:**")
+                st.markdown(f"`{row['Job Description']}`")
+                st.markdown("---")
 else:
     st.info("No applications available.")
-
 
 # --- View Existing Applications ---
 st.subheader("📊 Application Trend")
